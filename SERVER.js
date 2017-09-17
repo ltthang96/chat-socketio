@@ -6,6 +6,19 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
+// var mysql =require("mysql");
+// 	var connection = mysql.createConnection({
+// 		host	: 'localhost',
+// 		user 	: 'root',
+// 		password: '',
+// 		database: 'test',
+// 		port 	: 8080
+// 	});
+// 	connection.connect(function(err) {
+// 	  if (err) throw err;
+// 	  console.log("Connected!");
+// 	});
+
 server.listen(3000);
 
 //mang user
@@ -50,6 +63,7 @@ io.on("connection",function(socket){
 	});
 
 	socket.on("user-send-messages",function(data){
+
 		io.sockets.emit("server-send-messages", {un:socket.Username, nd:data});
 	});
 

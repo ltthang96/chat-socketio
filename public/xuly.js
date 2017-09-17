@@ -37,7 +37,8 @@ socket.on("server-send-room",function(data){
 });
 
 socket.on("server-send-messages",function(data){
-	$("#listMessages").append("<div class='ms'>" + data.un + ":" + data.nd +"</div>");	
+	var time = new Date().toLocaleString();
+	$("#listMessages").append("<p class='time'>" + time +"</p><div class='ms'>" + data.un + ":" + data.nd +"</div>");	
 });
 
 socket.on("dang-nhap",function(data){
@@ -58,7 +59,8 @@ socket.on("room-stop-chat",function(){
 
 
 socket.on("server-chat-room",function(data){
-	$("#listMessagesRoom").append("<div class='msRoom'>" + data.un + ":" + data.nd +"</div>");	
+	var time = new Date().toLocaleString();
+	$("#listMessagesRoom").append("<p class='time'>" + time +"</p><div class='msRoom'>" + data.un + ":" + data.nd +"</div>");	
 });
 
 $(document).ready(function(){
@@ -77,7 +79,14 @@ $(document).ready(function(){
 	});
 
 	$("#btnSendMessages").click(function(){
-		socket.emit("user-send-messages", $("#txtMessages").val());
+		 var mess = $('#txtMessages').val();
+                if(!mess || mess.length <= 0 ){
+                    $('#txtMessages').focus();
+                    return false;
+                } 
+             	socket.emit("user-send-messages", $("#txtMessages").val());
+				$('#txtMessages').val('');
+                $('#txtMessages').focus();
 	});
 
 	$("#txtMessages").focusin(function(){
