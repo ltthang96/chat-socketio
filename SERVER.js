@@ -6,18 +6,20 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-// var mysql =require("mysql");
-// 	var connection = mysql.createConnection({
-// 		host	: 'localhost',
-// 		user 	: 'root',
-// 		password: '',
-// 		database: 'test',
-// 		port 	: 8080
-// 	});
-// 	connection.connect(function(err) {
-// 	  if (err) throw err;
-// 	  console.log("Connected!");
-// 	});
+var mysql =require("mysql");
+	var connection = mysql.createConnection({
+		host	: 'localhost',
+		user 	: 'root',
+		password: '',
+		database: 'test',
+		port 	: 3306
+	});
+	connection.connect(function(err) {
+	  if (err){ 
+	  	console.log(err);
+        return;}
+	  console.log("Connected!");
+	});
 
 server.listen(3000);
 
@@ -59,7 +61,7 @@ io.on("connection",function(socket){
 
 	socket.on("leave-room",function(){
 		socket.leave("Room 1");
-		console.log(socket.adapter.rooms);
+		// console.log(socket.adapter.rooms);
 	});
 
 	socket.on("user-send-messages",function(data){
@@ -80,8 +82,8 @@ io.on("connection",function(socket){
 		socket.join("Room 1");
 		socket.Phong="Room 1";
 		socket.emit("server-send-room","Room 1")
-		console.log(socket);
-		console.log(socket.adapter.rooms);
+		// console.log(socket);
+		// console.log(socket.adapter.rooms);
 	});
 
 	// socket.on("join-room2",function(){
