@@ -1,9 +1,16 @@
 body{background-color: #C3FFFB}
 #wrapper{width: 600px margin:auto}
+
 #loginForm{  position: absolute;top: 50%;left: 50%;transform: translate(-50%, -65%); text-align: center;vertical-align: middle;}
 #txtUserName{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
 #txtPassword{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
 
+#registerForm { position: absolute;top: 50%;left: 50%;transform: translate(-50%, -65%); text-align: center;vertical-align: middle;}
+#txtUserName-register{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
+#txtPassword-register{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
+#txtEmail-register{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
+#txtFisrtName-register{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
+#txtLastName-register{background-color: transparent; border:solid 1px black; margin-bottom: 5px}
 
 #left, #right:{min-height: 300px}
 #left{width: 30%; float:left; background-color: #C3FFFB}

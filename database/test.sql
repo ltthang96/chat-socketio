@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
@@ -33,7 +33,7 @@ CREATE TABLE `user` (
   `user_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `user_password` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `user_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `firt_name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `fisrt_name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -42,7 +42,7 @@ CREATE TABLE `user` (
 -- Đang đổ dữ liệu cho bảng `user`
 --
 
-INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `firt_name`, `last_name`, `create_date`) VALUES
+INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `fisrt_name`, `last_name`, `create_date`) VALUES
 (1, 'thang', '1234', 'qwqe@gmail.com', 'Luc', 'Thang', '2017-09-17 09:48:16');
 
 --

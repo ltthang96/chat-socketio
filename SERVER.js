@@ -26,23 +26,85 @@ server.listen(3000);
 //mang user
 var mangUsers=[]; 
 
+function checkuserdb(username, callback) {
+    connection.query("select user_id from user where user_name = '" + username + "'", function(err, result, fields) {
+        if (err) {
+            console.log('this.sql', this.sql); //command/query
+            callback(err, null);
+        } else callback(null, result);
+    });
+}
+
+function insertdb(user_name, user_password, user_email,fisrt_name,last_name, callback) {
+	var sql="INSERT INTO user (user_name,user_password,user_email,fisrt_name,last_name) VALUES ('" + user_name + "','" + user_password + "','" + user_email + "','"+ fisrt_name + "','" + last_name + "' ) ";
+    connection.query(sql, function(err, result, fields) {
+        if (err) {
+            console.log('this.sql', this.sql); //command/query
+            callback(err, null);
+        } else callback(null, result);
+    });
+}
+
+function checkdangnhap(username, callback) {
+		connection.query("select * from user where user_name ='" + username + "'" , function(err, result, fields) {
+        if (err) callback(err, null);
+        else callback(null, result);
+    });
+}
+
 io.on("connection",function(socket){
 	console.log("Có "+socket.id+ " kết nối đến server");
 
-	//nhan username tu client
-	socket.on("Client-send-username",function(data){
-		if(mangUsers.indexOf(data)>=0){
-			//fail
-			socket.emit("server-send-dki-thatbai");	
-			}
-			//success
-			else{
-				mangUsers.push(data);
-				socket.Username = data; //tao username
-				socket.emit("server-send-dki-thanhcong",data);				
-				io.sockets.emit("server-send-ds-user", mangUsers);
-			}
-		}); 
+	//nhan thong tin user tu client
+	socket.on("Client-send-user-info",function(thongtinuser){
+		checkuserdb(thongtinuser.username, function(err, result) {
+                if (err) {
+                    console.log('err-register:' + err);
+                } else {
+                    if (typeof result !== 'undefined' && result.length > 0) {
+                        // user đã có
+                       socket.emit("server-send-dki-thatbai");	
+                    } else {
+                        //user chưa có
+                        console.log('client ' + socket.id + ' vua thuc hien dang ky user ' +thongtinuser.username+' '+thongtinuser.password );
+                        insertdb(thongtinuser.username, thongtinuser.password, thongtinuser.email,thongtinuser.fisrtname,thongtinuser.lastname, function(err, result) {
+                            if (err){
+                                console.log('err-insert' + err)
+                            }
+                            else {
+                               socket.emit('server-send-dki-thanhcong');
+                            };
+                            });
+                    }
+                }
+            });
+	});
+
+	socket.on("login", function(thongtinuser){
+		var user = thongtinuser.username;
+		checkdangnhap(thongtinuser.username,function(err,data)
+		{
+		// connection.query("select * from user where user_name ='" + user_name + "'" , function(err, result, fields) {
+        	 // and user_password ='" + user_password + "'
+        	if (err) {
+                console.log('err:' + err);
+                console.log('error SQL');
+            } else{
+
+            	if(data.length>0){
+            		if(thongtinuser.password == data[0].user_password){
+            			console.log('login success!');
+            		}
+            		else{
+            			console.log('emaill and password does not match!');
+            		}
+            	}
+            	else{
+            		console.log("email not exist!");
+            	}
+            }
+        });
+	});
 
 	socket.on("disconnect",function(){
 		mangUsers.splice(

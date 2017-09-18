@@ -10,13 +10,30 @@
 </head>
 <body>
 	<div id=wrapper>
+		<!-- form đăng nhập -->
 		<div id="loginForm">
-			<h3>LOGIN</h3>
+			<h3>LOG IN</h3>
 			<input type="text" id="txtUserName" placeholder="Username" /><br>
-			<input type="text" id="txtPassword" placeholder="Password"><br>
+			<input type="password" id="txtPassword" placeholder="Password"><br>
 			<input type="button" value="Register" id="btnRegister">
+			<input type="submit" value="Login" id="btnLogin">	
+			<div class="alert-login">h</div>		
 		</div>
 
+		<!-- form đăng ký -->
+		<div id="registerForm">
+			<h3>REGISTER</h3>
+			<input type="text" id="txtUserName-register" placeholder="Your Username"/><br>
+			<input type="password" id="txtPassword-register" placeholder="Your Password"/><br>
+			<input type="email" id="txtEmail-register" placeholder="Your Email"><br>
+			<input type="text" id="txtFisrtName-register" placeholder="Fisrt Name"><br>	
+			<input type="text" id="txtLastName-register" placeholder="Last Name"><br>
+			<input type="button" value="Back" id="btnBack">							
+			<input type="submit" value="Register" id="btnRegisterUser">
+			<div class="alert-register"></div>
+		</div>
+		
+		<!-- chat -->
 		<div id="chatForm">
 			<div id="left">
 				<div id="boxTitle">User Online</div>

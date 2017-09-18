@@ -16,13 +16,14 @@ socket.on("server-send-ds-user",function(data){
 //tbao dki thanh cong, hide loginform
 socket.on("server-send-dki-thanhcong",function(data){
 	alert("Registration successful");
-	$("#currentUser").html(data);
-	$("#loginForm").hide(2000);
-	$("#chatForm").show(1000);
-	$("#listMessagesRoom").hide();
-	$("#thongbaoRoom").hide();
-	$("#messagesRoom").hide();
-	$("#sayHiRoom").hide();
+	$("#registerForm").hide();
+	// $("#currentUser").html(data);
+	$("#loginForm").show();
+	// $("#chatForm").show(1000);
+	// $("#listMessagesRoom").hide();
+	// $("#thongbaoRoom").hide();
+	// $("#messagesRoom").hide();
+	// $("#sayHiRoom").hide();
 });
 
 socket.on("server-send-room",function(data){
@@ -65,11 +66,49 @@ socket.on("server-chat-room",function(data){
 
 $(document).ready(function(){
 	$("#loginForm").show();
+	$("#registerForm").hide();
 	$("#chatForm").hide();
 
 	//emit username>server
 	$("#btnRegister").click(function(){
-		socket.emit("Client-send-username", $("#txtUserName").val());
+		// socket.emit("Client-send-username", $("#txtUserName").val());
+		$("#loginForm").hide();
+		$("#registerForm").show();
+	});
+
+	$("#btnBack").click(function(){
+	$("#loginForm").show();
+	$("#registerForm").hide();
+	});
+
+	$("#btnRegisterUser").click(function(e){
+	   	var u = $('#txtUserName-register').val();
+        var p = $('#txtPassword-register').val();
+        var e = $('#txtEmail-register').val();
+        var f = $('#txtFisrtName-register').val();
+        var l = $('#txtLastName-register').val();
+     	socket.emit("Client-send-user-info",{
+     		username: u,
+     		password: p,
+     		email: e,
+     		fisrtname: f,
+     		lastname: l
+     	});
+	});
+
+	$("#btnLogin").click(function(){
+	    var tmp = {};
+
+        tmp.username = $('#txtUserName').val();
+        tmp.password = $('#txtPassword').val();
+        if (!tmp.username || tmp.username.length === 0) {
+            $('#txtUserName').focus();
+            $('.alert-login').html('Bạn chưa nhập user!');
+        } else if (!tmp.password || tmp.password.length === 0) {
+            $('#txtPassword').focus();
+            $('.alert-login').html('Bạn chưa nhập password!');
+        }
+        socket.emit('login', tmp);
 	});
 
 	$("#btnLogout").click(function(){
