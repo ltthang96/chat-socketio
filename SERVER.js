@@ -6,6 +6,7 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
+//khai bao sql
 var mysql =require("mysql");
 	var connection = mysql.createConnection({
 		host	: 'localhost',
@@ -14,6 +15,7 @@ var mysql =require("mysql");
 		database: 'test',
 		port 	: 3306
 	});
+	//check connect
 	connection.connect(function(err) {
 	  if (err){ 
 	  	console.log(err);
@@ -26,6 +28,7 @@ server.listen(3000);
 //mang user
 var mangUsers=[]; 
 
+//check user trong database
 function checkuserdb(username, callback) {
     connection.query("select user_id from user where user_name = '" + username + "'", function(err, result, fields) {
         if (err) {
@@ -35,6 +38,7 @@ function checkuserdb(username, callback) {
     });
 }
 
+//chen user moi register
 function insertdb(user_name, user_password, user_email,fisrt_name,last_name, callback) {
 	var sql="INSERT INTO user (user_name,user_password,user_email,fisrt_name,last_name) VALUES ('" + user_name + "','" + user_password + "','" + user_email + "','"+ fisrt_name + "','" + last_name + "' ) ";
     connection.query(sql, function(err, result, fields) {
@@ -45,6 +49,7 @@ function insertdb(user_name, user_password, user_email,fisrt_name,last_name, cal
     });
 }
 
+//kiem tra login
 function checkdangnhap(username, callback) {
 		connection.query("select * from user where user_name ='" + username + "'" , function(err, result, fields) {
         if (err) callback(err, null);
@@ -79,6 +84,7 @@ io.on("connection",function(socket){
                 }
             });
 	});
+//event login
 
 	socket.on("login", function(thongtinuser){
 		var user = thongtinuser.username;
@@ -91,16 +97,16 @@ io.on("connection",function(socket){
                 console.log('error SQL');
             } else{
 
-            	if(data.length>0){
+            	if(data.length>0){ //co username trong database
             		if(thongtinuser.password == data[0].user_password){
-            			console.log('login success!');
+            			console.log('login success!');  //dung pass
             		}
             		else{
-            			console.log('emaill and password does not match!');
+            			console.log('emaill and password does not match!'); //sai pass
             		}
             	}
             	else{
-            		console.log("email not exist!");
+            		console.log("email not exist!"); //khong co username
             	}
             }
         });
