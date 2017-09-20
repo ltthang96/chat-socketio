@@ -96,17 +96,29 @@ io.on("connection",function(socket){
                 console.log('err:' + err);
                 console.log('error SQL');
             } else{
-
+            	
             	if(data.length>0){ //co username trong database
             		if(thongtinuser.password == data[0].user_password){
             			console.log('login success!');  //dung pass
+            			var kq={};
+            			kq.result=1;
+            			kq.reason="Login successful!";
+            			socket.emit('server-send-login',kq);
             		}
             		else{
             			console.log('emaill and password does not match!'); //sai pass
+            			var kq={};
+            			kq.result=0;
+            			kq.reason="Email and password does not match!";
+            			socket.emit('server-send-login',kq);
             		}
             	}
             	else{
-            		console.log("email not exist!"); //khong co username
+            		console.log("Email not exist!"); //khong co username
+            			var kq={};
+            		kq.result=0;
+            		kq.reason="Email not exist!";
+            		socket.emit('server-send-login',kq);
             	}
             }
         });
