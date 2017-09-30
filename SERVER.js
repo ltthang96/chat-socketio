@@ -6,6 +6,9 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
+var bcrypt = require('bcrypt');
+var salt = bcrypt.genSaltSync(10);
+
 //khai bao sql
 var mysql =require("mysql");
 	var connection = mysql.createConnection({
@@ -27,7 +30,8 @@ server.listen(3000);
 
 //mang user
 var mangUsers=[]; 
-
+var kq = {}; // tao mang user va ds thanh cong that bai
+kq.datahtml = [];
 //check user trong database
 function checkuserdb(username, callback) {
     connection.query("select user_id from user where user_name = '" + username + "'", function(err, result, fields) {
@@ -71,8 +75,15 @@ io.on("connection",function(socket){
                        socket.emit("server-send-dki-thatbai");	
                     } else {
                         //user chưa có
+                        var hashPassword = bcrypt.hashSync(thongtinuser.password, salt);
+                        console.log(hashPassword);
+            //             bcrypt.compareSync(thongtinuser.password, hashPassword, function (err, res) {
+				        //     // res == true
+				        //     console.log('equal')
+				        //     console.log(res)
+				        // });
                         console.log('client ' + socket.id + ' vua thuc hien dang ky user ' +thongtinuser.username+' '+thongtinuser.password );
-                        insertdb(thongtinuser.username, thongtinuser.password, thongtinuser.email,thongtinuser.fisrtname,thongtinuser.lastname, function(err, result) {
+                        insertdb(thongtinuser.username, hashPassword, thongtinuser.email,thongtinuser.fisrtname,thongtinuser.lastname, function(err, result) {
                             if (err){
                                 console.log('err-insert' + err)
                             }
@@ -95,36 +106,77 @@ io.on("connection",function(socket){
         	if (err) {
                 console.log('err:' + err);
                 console.log('error SQL');
-            } else{
-
-            	if(data.length>0){ //co username trong database
-            		if(thongtinuser.password == data[0].user_password){
+            } else if(data.length>0){ //co username trong database
+            		// var hashPassword = bcrypt.hash(thongtinuser.password, salt);
+              //           console.log(hashPassword);
+              		var res =bcrypt.compareSync(thongtinuser.password, data[0].user_password);
+            		// bcrypt.compareSync(thongtinuser.password, data[0].user_password, function (err, res){ 
+            		if(res==true){
             			console.log('login success!');  //dung pass
+            			// var kq={};
+            			kq.result=1;
+            			kq.alert="Login successful!";
+            			socket.username = thongtinuser.username;
+            			socket.nameuser= data[0].last_name +" "+data[0].fisrt_name;
+            			kq.nameuser=socket.nameuser;
+            			kq.reason=socket.nameuser+" vừa mới đăng nhập";
+            			console.log(socket.username+" " +socket.nameuser);
+            			var ttuser={};
+            			ttuser.idObj = socket.id;
+                        ttuser.nameObj = user;
+                        ttuser.nameuserobj = socket.nameuser;
+                        // console.log(ttuser);
+                        kq.datahtml.push(ttuser);
+                        console.log(kq.datahtml);
+                        io.emit('all-recived', kq);
+                        socket.emit('server-send-login',kq);
             		}
             		else{
             			console.log('emaill and password does not match!'); //sai pass
+            			// var kq={};
+            			kq.result=0;
+            			kq.reason="Email and password does not match!";
+            			socket.emit('server-send-login',kq);
             		}
             	}
             	else{
-            		console.log("email not exist!"); //khong co username
-            	}
-            }
+            		console.log("Email not exist!"); //khong co username
+            			// var kq={};
+            		kq.result=0;
+            		kq.reason="Email not exist!";
+            		socket.emit('server-send-login',kq);
+            		}
+            	
         });
 	});
 
-	socket.on("disconnect",function(){
-		mangUsers.splice(
-			mangUsers.indexOf(socket.Username),1
-			);
-		socket.broadcast.emit("server-send-ds-user",mangUsers);
-	});
+    socket.on('disconnect', function() {
+        console.log(' user da ngat ket noi ' + socket.id);
+        // if(checkusername(socket) == 0 ) return;
+        kq.result = 1;
+        kq.reason = ' user ' + socket.username + 'vua out ra';
+        kq.datahtml = kq.datahtml.filter(function(el) {
+            return el.idObj !== socket.id;
+        });
+        socket.broadcast.emit('all-recived', kq);
+    });
 
 	
-	socket.on("logout",function(){
-		mangUsers.splice(
-			mangUsers.indexOf(socket.Username),1
-			);
-		socket.broadcast.emit("server-send-ds-user",mangUsers);
+	// socket.on("logout",function(){
+	// 	mangUsers.splice(
+	// 		mangUsers.indexOf(socket.Username),1
+	// 		);
+	// 	socket.broadcast.emit("server-send-ds-user",mangUsers);
+	// });
+	// 
+    socket.on('logout', function() {
+    console.log(' client ' + socket.id + ' da logout');
+    kq.result = 1;
+    kq.reason = socket.nameuser + ' vừa đăng xuất';
+    kq.datahtml = kq.datahtml.filter(function(el) {
+        return el.idObj !== socket.id;
+    });
+    socket.broadcast.emit('all-recived', kq);
 	});
 
 	socket.on("leave-room",function(){
@@ -134,11 +186,11 @@ io.on("connection",function(socket){
 
 	socket.on("user-send-messages",function(data){
 
-		io.sockets.emit("server-send-messages", {un:socket.Username, nd:data});
+		io.sockets.emit("server-send-messages", {un:socket.nameuser, nd:data});
 	});
 
 	socket.on("chatting",function(){
-		var s = socket.Username+" đang nhập...";
+		var s = socket.nameuser+" đang nhập...";
 		socket.broadcast.emit("dang-nhap",s);
 	});
 

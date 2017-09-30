@@ -24,7 +24,19 @@ body{background-color: #C3FFFB}
 #sayHiRoom{text-align: right;margin-bottom: 10px}
 #currentUser{font-weight: bold; font-style: italic;}
 #currentRoom{font-weight: bold; font-style: italic;}
-#listMessages{ overflow-y: auto;height: 200px;border:solid 1px black; background-color: #92E6D5; margin-bottom: 15px;margin-left: 15px}
+#listMessages{  
+display: -webkit-box;
+display: -webkit-flex;
+display: -moz-flex;
+display: -ms-flexbox;
+display: flex;
+-webkit-flex-direction: column-reverse;
+-moz-flex-direction: column-reverse;
+-ms-flex-direction: column-reverse;
+flex-direction: column-reverse;
+overflow: hidden;
+overflow-y: scroll;
+height: 200px;border:solid 1px black; background-color: #92E6D5; margin-bottom: 15px;margin-left: 15px}
 
 #thongbao{margin-left: 15px}
 

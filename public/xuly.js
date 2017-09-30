@@ -26,6 +26,42 @@ socket.on("server-send-dki-thanhcong",function(data){
 	// $("#sayHiRoom").hide();
 });
 
+socket.on("server-send-login",function(data){
+	if((data.result)>0)
+	{
+		alert(data.alert);
+		$(".alert-login").html("");
+		// $("#registerForm").hide();
+		$("#currentUser").html(data.nameuser);
+		$("#loginForm").hide(500);
+		$("#chatForm").show(1000);
+		$("#listMessagesRoom").hide();
+		$("#thongbaoRoom").hide();
+		$("#messagesRoom").hide();
+		$("#sayHiRoom").hide();
+
+	} else
+		{
+			$(".alert-login").html(data.reason);
+		}
+});
+
+socket.on('all-recived', function(msg) {
+	var iduser = $("#iduser").attr('value');
+    //console.log(msg.datahtml);
+    var listuser = '<li class="listuser fixuser" idobj="090" style="color: white;background: #0288D1;font-weight: bold;cursor: pointer;">Sửa thông tin user</li>';
+    for (i = 0; i < msg.datahtml.length; i++) {
+        if (iduser == msg.datahtml[i].idObj) {
+            listuser += '<li class="listuser activeuser" idobj="' + msg.datahtml[i].idObj + '"     nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
+        } else {
+            listuser += '<li class="listuser" idobj="' + msg.datahtml[i].idObj + '" nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
+        }
+    }
+    listuser += "<p>" + msg.reason + "</p>";
+    $('#boxContent').html(listuser);
+});
+
+
 socket.on("server-send-room",function(data){
 	$("#currentRoom").html(data);
 	$("#listMessagesRoom").show(1500);
@@ -39,7 +75,7 @@ socket.on("server-send-room",function(data){
 
 socket.on("server-send-messages",function(data){
 	var time = new Date().toLocaleString();
-	$("#listMessages").append("<p class='time'>" + time +"</p><div class='ms'>" + data.un + ":" + data.nd +"</div>");	
+	$("#listMessages").prepend("<p class='time'>" + time +"</p><div class='ms'>" + data.un + ":" + data.nd +"</div>");	
 });
 
 socket.on("dang-nhap",function(data){
@@ -61,7 +97,7 @@ socket.on("room-stop-chat",function(){
 
 socket.on("server-chat-room",function(data){
 	var time = new Date().toLocaleString();
-	$("#listMessagesRoom").append("<p class='time'>" + time +"</p><div class='msRoom'>" + data.un + ":" + data.nd +"</div>");	
+	$("#listMessagesRoom").prepend("<div class='msRoom'>" + data.un + ":" + data.nd +"</div><p class='time'>" + time +"</p>");	
 });
 
 $(document).ready(function(){
@@ -87,6 +123,32 @@ $(document).ready(function(){
         var e = $('#txtEmail-register').val();
         var f = $('#txtFisrtName-register').val();
         var l = $('#txtLastName-register').val();
+        if(!u||u.length === 0)
+        {
+        	$('#txtUserName-register').focus();
+        	$(".alert-register").html("Username is empty!");
+        	return false;
+        } else if(!p||p.length ===0)
+    		{
+    			$('#txtPassword-register').focus();
+	        	$(".alert-register").html("Password is empty!");
+	        	return false;
+    		} else if(!e||e.length ===0)
+        		{
+        			$('#txtEmail-register').focus();
+		        	$(".alert-register").html("Email is empty!");
+		        	return false;
+        		}else if(!f||f.length ===0)
+        		{
+        			$('#txtFisrtName-register').focus();
+		        	$(".alert-register").html("FisrtName is empty!");
+		        	return false;
+        		}else if(!l||l.length ===0)
+        		{
+        			$('#txtLastName-register').focus();
+		        	$(".alert-register").html("LastName is empty!");
+		        	return false;
+        		}
      	socket.emit("Client-send-user-info",{
      		username: u,
      		password: p,
@@ -104,22 +166,24 @@ $(document).ready(function(){
         if (!tmp.username || tmp.username.length === 0) {
             $('#txtUserName').focus();
             $('.alert-login').html('Bạn chưa nhập user!');
+            return false;
         } else if (!tmp.password || tmp.password.length === 0) {
             $('#txtPassword').focus();
             $('.alert-login').html('Bạn chưa nhập password!');
+            return false;
         }
         socket.emit('login', tmp);
 	});
 
 	$("#btnLogout").click(function(){
 		socket.emit("logout");
-		$("#loginForm").show(2000);
-		$("#chatForm").hide(1000);
+		$("#loginForm").show(1500);
+		$("#chatForm").hide(700);
 	});
 
 	$("#btnSendMessages").click(function(){
 		 var mess = $('#txtMessages').val();
-                if(!mess || mess.length <= 0 ){
+                if(mess.trim().length<=0){
                     $('#txtMessages').focus();
                     return false;
                 } 
