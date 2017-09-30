@@ -29,6 +29,7 @@ socket.on("server-send-dki-thanhcong",function(data){
 socket.on("server-send-login",function(data){
 	if((data.result)>0)
 	{
+<<<<<<< HEAD
 		alert(data.alert);
 		$(".alert-login").html("");
 		// $("#registerForm").hide();
@@ -40,12 +41,17 @@ socket.on("server-send-login",function(data){
 		$("#messagesRoom").hide();
 		$("#sayHiRoom").hide();
 
+=======
+		alert(data.reason);
+		$(".alert-login").html("");
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
 	} else
 		{
 			$(".alert-login").html(data.reason);
 		}
 });
 
+<<<<<<< HEAD
 socket.on('all-recived', function(msg) {
 	var iduser = $("#iduser").attr('value');
     //console.log(msg.datahtml);
@@ -62,6 +68,8 @@ socket.on('all-recived', function(msg) {
 });
 
 
+=======
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
 socket.on("server-send-room",function(data){
 	$("#currentRoom").html(data);
 	$("#listMessagesRoom").show(1500);
