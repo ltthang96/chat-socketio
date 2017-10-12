@@ -1,9 +1,9 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th9 17, 2017 lúc 07:24 AM
+-- Thời gian đã tạo: Th9 30, 2017 lúc 09:32 AM
 -- Phiên bản máy phục vụ: 10.1.25-MariaDB
 -- Phiên bản PHP: 7.1.7
 
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `user` (
   `user_id` bigint(20) NOT NULL,
   `user_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_password` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `user_password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `user_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fisrt_name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
@@ -43,7 +43,17 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `user_email`, `fisrt_name`, `last_name`, `create_date`) VALUES
-(1, 'thang', '1234', 'qwqe@gmail.com', 'Luc', 'Thang', '2017-09-17 09:48:16');
+(18, 'sach2', '$2a$10$yjGBaZBihz.bwcIOXsAjf.lTu2bXJYx4i1w7jKOXjW1HtAatVX79a', 'sach@gmail.com', 'Sách', 'Trần', '2017-09-30 13:14:54'),
+(19, 'sach23', '$2a$10$9cTpU3Xlh2aLSYxQEOosWeF9LmTxUJp5Vip78rMjVdm9S7hz2BYs6', 'sach@gmail.com', 'Sách', 'Trần', '2017-09-30 13:39:00'),
+(20, 'qqqqq', '$2a$10$9cTpU3Xlh2aLSYxQEOosWeF9LmTxUJp5Vip78rMjVdm9S7hz2BYs6', 'ẻ', 'ưẻw', 'ưẻ', '2017-09-30 13:40:01'),
+(21, '12321', '$2a$10$sf3c7HXdwAtdP8vUAJY1V.cbAqQ8fRVqBAZx9XUJGXXAjwoBuxu5q', 'qư', 'qưeq', 'qưe', '2017-09-30 13:40:47'),
+(22, '123213', '$2a$10$sf3c7HXdwAtdP8vUAJY1V.cbAqQ8fRVqBAZx9XUJGXXAjwoBuxu5q', 'qư', 'qưeq', 'qưe', '2017-09-30 13:40:58'),
+(23, '1232131', '$2a$10$W6rCxOg90pUROJyx.oikUeXBbemHFy3Dc.l3RKQUl6xbNJjokohmW', 'qư', 'qưeq', 'qưe', '2017-09-30 13:41:13'),
+(24, '123', '$2a$10$0iukdH3m0YR1dBfXZToXUeHsGqBNQXZIJBGNlc/nlbD/Qr02MitkW', 'ửẻ', 'qưeqưeq', 'qưewqe', '2017-09-30 13:52:35'),
+(25, '1233', '$2a$10$wH8R/fvzT1YwIA0AMtg2j.9f0W/fKGMmGDGqm1qKSmdJHEssEXOFG', '123', '123213', '123', '2017-09-30 13:54:19'),
+(27, '4443', '$2a$10$J/.NqYMmAJB5ZtjcYxpvaeAetqZ1hW/XQzTG2SIVWtsbJ8liTJ3pC', 'qư', 'qưe', 'qưe', '2017-09-30 14:08:06'),
+(28, '1234', '$2a$10$Prkwi4n5iDEUTOwBg6QF8O/TzhIGKzuCFOfy3iip13puNQE/ok83e', 'qwe@gmail.com', 'qwe', 'werwer', '2017-09-30 14:19:11'),
+(29, 'thang', '$2a$10$AQSEOzuaaru.YPMI.OkfzOOcXvwBj9ytyBxvT39tvpZyBJUyses1O', 'dongianlaten@gmail.com', 'Lục', 'Thắng', '2017-09-30 14:30:17');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -63,7 +73,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;COMMIT;
+  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
