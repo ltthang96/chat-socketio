@@ -29,12 +29,19 @@ socket.on("server-send-dki-thanhcong",function(data){
 socket.on("server-send-login",function(data){
 	if((data.result)>0)
 	{
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
 		alert(data.alert);
 		$(".alert-login").html("");
 		// $("#registerForm").hide();
 		$("#currentUser").html(data.nameuser);
+<<<<<<< HEAD
 		$('#iduser').val(data.iduser);
         $('#nameuser').val(data.username);
+=======
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
 		$("#loginForm").hide(500);
 		$("#chatForm").show(1000);
 		$("#listMessagesRoom").hide();
@@ -42,12 +49,23 @@ socket.on("server-send-login",function(data){
 		$("#messagesRoom").hide();
 		$("#sayHiRoom").hide();
 
+<<<<<<< HEAD
+=======
+=======
+		alert(data.reason);
+		$(".alert-login").html("");
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
 	} else
 		{
 			$(".alert-login").html(data.reason);
 		}
 });
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
 socket.on('all-recived', function(msg) {
 	var iduser = $("#iduser").attr('value');
     //console.log(msg.datahtml);
@@ -63,6 +81,7 @@ socket.on('all-recived', function(msg) {
     $('#boxContent').html(listuser);
 });
 
+<<<<<<< HEAD
 $(document).on('click', '.off-chat-private', function(e) {
     $(this).parent().parent().hide();
 });
@@ -108,6 +127,11 @@ socket.on('server-send-oneclient', function(msg) {
                 }
             });
 
+=======
+
+=======
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
 socket.on("server-send-room",function(data){
 	$("#currentRoom").html(data);
 	$("#listMessagesRoom").show(1500);

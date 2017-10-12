@@ -106,12 +106,17 @@ io.on("connection",function(socket){
         	if (err) {
                 console.log('err:' + err);
                 console.log('error SQL');
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
             } else if(data.length>0){ //co username trong database
             		// var hashPassword = bcrypt.hash(thongtinuser.password, salt);
               //           console.log(hashPassword);
               		var res =bcrypt.compareSync(thongtinuser.password, data[0].user_password);
             		// bcrypt.compareSync(thongtinuser.password, data[0].user_password, function (err, res){ 
             		if(res==true){
+<<<<<<< HEAD
             			console.log('login success!');  //dung pass
             			// var kq={};
             			kq.result=1;
@@ -137,6 +142,45 @@ io.on("connection",function(socket){
             		else{
             			console.log('emaill and password does not match!'); //sai pass
             			// var kq={};
+=======
+            			console.log('login success!');  //dung pass
+            			// var kq={};
+            			kq.result=1;
+            			kq.alert="Login successful!";
+            			socket.username = thongtinuser.username;
+            			socket.nameuser= data[0].last_name +" "+data[0].fisrt_name;
+            			kq.nameuser=socket.nameuser;
+            			kq.reason=socket.nameuser+" vừa mới đăng nhập";
+            			console.log(socket.username+" " +socket.nameuser);
+            			var ttuser={};
+            			ttuser.idObj = socket.id;
+                        ttuser.nameObj = user;
+                        ttuser.nameuserobj = socket.nameuser;
+                        // console.log(ttuser);
+                        kq.datahtml.push(ttuser);
+                        console.log(kq.datahtml);
+                        io.emit('all-recived', kq);
+                        socket.emit('server-send-login',kq);
+            		}
+            		else{
+            			console.log('emaill and password does not match!'); //sai pass
+            			// var kq={};
+=======
+            } else{
+            	
+            	if(data.length>0){ //co username trong database
+            		if(thongtinuser.password == data[0].user_password){
+            			console.log('login success!');  //dung pass
+            			var kq={};
+            			kq.result=1;
+            			kq.reason="Login successful!";
+            			socket.emit('server-send-login',kq);
+            		}
+            		else{
+            			console.log('emaill and password does not match!'); //sai pass
+            			var kq={};
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
             			kq.result=0;
             			kq.reason="Email and password does not match!";
             			socket.emit('server-send-login',kq);
@@ -144,12 +188,17 @@ io.on("connection",function(socket){
             	}
             	else{
             		console.log("Email not exist!"); //khong co username
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
             			// var kq={};
             		kq.result=0;
             		kq.reason="Email not exist!";
             		socket.emit('server-send-login',kq);
             		}
             	
+<<<<<<< HEAD
         });
 	});
 
@@ -177,6 +226,19 @@ io.on("connection",function(socket){
         io.sockets.in(data.guiden).emit("server-chat-private", tmp);*/
     });
 
+=======
+=======
+            			var kq={};
+            		kq.result=0;
+            		kq.reason="Email not exist!";
+            		socket.emit('server-send-login',kq);
+            	}
+            }
+>>>>>>> 29f4a44ad02e92395ca23036318468cf798f4e89
+        });
+	});
+
+>>>>>>> f9ae6f4aaaa7a2d0d0a9ec36085fe4e15a011d87
     socket.on('disconnect', function() {
         console.log(' user da ngat ket noi ' + socket.id);
         // if(checkusername(socket) == 0 ) return;
