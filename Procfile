@@ -1,1 +1,1 @@
-web: npm install express ejs socketio bcrypt mysql 
+web: node SERVER.js
