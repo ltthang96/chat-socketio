@@ -13,10 +13,10 @@ var salt = bcrypt.genSaltSync(10);
 //khai bao sql
 var mysql =require("mysql");
     var connection = mysql.createConnection({
-        host    : 'localhost',
-        user    : 'root',
-        password: '',
-        database: 'test',
+        host    : 'sql9.freemysqlhosting.net',
+        user    : 'sql9204207',
+        password: 'dEz3rHtqMC',
+        database: 'sql9204207',
         port    : 3306
     });
     //check connect
