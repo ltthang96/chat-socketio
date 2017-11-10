@@ -27,7 +27,7 @@ var mysql =require("mysql");
       console.log("Connected!");
     });
 
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 
 //mang user
 var mangUsers=[]; 
