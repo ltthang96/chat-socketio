@@ -26,6 +26,10 @@ socket.on("server-send-dki-thanhcong",function(data){
 	// $("#sayHiRoom").hide();
 });
 
+socket.on("log-room",function(){
+	alert("Bạn đã ở trong room này rồi")
+});
+
 socket.on("server-send-login",function(data){
 	if((data.result)>0)
 	{
@@ -51,22 +55,24 @@ socket.on("server-send-login",function(data){
 socket.on('all-recived', function(msg) {
 	var iduser = $("#iduser").attr('value');
     //console.log(msg.datahtml);
-    var listuser = '<li class="listuser fixuser" idobj="090" style="color: white;background: #0288D1;font-weight: bold;cursor: pointer;">Sửa thông tin user</li>';
+    var listuser = '<li class="listuser fixuser well well-sm" idobj="090" style=" margin-bottom:0; font-weight: bold;background-color:skyblue;cursor: pointer;list-style-type: none;">Sửa thông tin user</li>';
     for (i = 0; i < msg.datahtml.length; i++) {
         if (iduser == msg.datahtml[i].idObj) {
-            listuser += '<li class="listuser activeuser" idobj="' + msg.datahtml[i].idObj + '"     nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
+            listuser += '<li class="listuser activeuser well well-sm" style="border:none;margin-bottom:0;list-style-type: none;background-color:ivory;" idobj="' + msg.datahtml[i].idObj + '"     nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
         } else {
-            listuser += '<li class="listuser" idobj="' + msg.datahtml[i].idObj + '" nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
+            listuser += '<li class="listuser well well-sm" style="border:none;margin-bottom:0;list-style-type: none;background-color:ivory;" idobj="' + msg.datahtml[i].idObj + '" nameobj="'+msg.datahtml[i].nameObj+'" nameuserobj="'+msg.datahtml[i].nameuserobj+'">' + msg.datahtml[i].nameuserobj + '</li>';
         }
     }
     listuser += "<p class='tbao'>" + msg.reason + "</p>";
     $('#boxContent').html(listuser);
-    $('.tbao').fadeOut(10000);
+    $('.tbao').fadeOut(6000);
 });
+
 
 $(document).on('click', '.off-chat-private', function(e) {
     $(this).parent().parent().hide();
 });
+
 $(document).on('click', '.listuser', function(e) {
     var iduser = $(this).attr("idobj");
     if(iduser == "090") return;
@@ -74,7 +80,7 @@ $(document).on('click', '.listuser', function(e) {
     var nameuserobj = $(this).attr("nameuserobj");
     var iduser_tmp = $('#iduser').val();
     if (iduser == iduser_tmp) return;
-    var html_chatprivate = '<div id="' + nameuser + '" style="width: 25%;position: fixed;bottom: 0;right: 0;height: 300px;z-index: 999;background-color: #fafafa;/* opacity: 0.4; */border: 1px solid rgba(0,0,0,.1);box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);"><div style="   min-height: 35px;   background: #0288d1 !important;line-height: 35px;padding-left: 10px;"><span style="color:white" class="nameuser">'+nameuserobj+'</span><input type="button" class="off-chat-private" value="Hide" style="float: right;"></div><div class="kq-tinnhan-gui" style="border: 3px solid white;padding: 10px;height: 190px;overflow: scroll;"></div><div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">            <input type="text" class="mess-tinnhan-gui" placeholder="Type a message" value="">            <input type="button" class="send-tinnhan-gui" idusernhan="'+iduser+'" value="Send">        </div>    </div>';
+    var html_chatprivate = '<div id="' + nameuser + '"style="max-width:250px;width: 30%;position: fixed;bottom: 0;left: 10px;height: 300px;z-index: 999;background-color: #eee;/* opacity: 0.4; */border: 1px solid rgba(0,0,0,.1);box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);"><div style="   min-height: 35px;   background: lightseagreen !important;line-height: 35px;padding-left: 10px;"><span style="color:white" class="nameuser">'+nameuserobj+'</span><input type="button" class="off-chat-private" value="  X " style="float: right;border: none;background-color: transparent; color: white; padding-top: 10px; "></div><div class="kq-tinnhan-gui" style="border: 3px solid white;padding: 10px;height: 190px;overflow-y: scroll;"></div><div class="mespri">            <input type="text" class="mess-tinnhan-gui form-control" placeholder="Type a message" value="">            <input type="button" class="send-tinnhan-gui btn btn-success" idusernhan="'+iduser+'" value="Send">        </div>    </div>';
     if ($("#" + nameuser).length == 0) {
         //it doesn't exist
         $('body').append(html_chatprivate);
@@ -101,11 +107,26 @@ $(document).on('click', '.room',function(){
 	socket.emit("join-room",roomID);
 });
 
+$(document).on('click','.fixuser',function(e){
+    $('#fix-register-card').show();
+    socket.emit("request-info",$("#nameuser").val());
+});
+
+socket.on("send-info",function(info){
+	$("#first-name-fix").val(info.firstname);
+	$("#last-name-fix").val(info.lastname);
+	$('#email-fix').val(info.email);
+});
+
+socket.on("server-res-fix",function(res){
+	$('.log-fix-card').html(res.reason);
+});
+
 socket.on('server-send-oneclient', function(msg) {
                 //$('#tinnhan-nhan').show();
                 //$('#tinnhan-nhan > .user-tinnhan-nhan ').html(msg.username);
                 //$('#tinnhan-nhan > #kq-tinnhan-gui ').append(msg.noidung);
-                var html_chatprivate = '<div id="' + msg.nameuser + '" style="width: 25%;position: fixed;bottom: 0;right: 0;height: 300px;z-index: 999;background-color: #fafafa;/* opacity: 0.4; */border: 1px solid rgba(0,0,0,.1);box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);"><div style="   min-height: 35px;   background: #0288d1 !important;line-height: 35px;padding-left: 10px;"><span style="color: white;">chat với </span><span class="nameuser">'+ msg.nameuserobj+'</span><input type="button" class="off-chat-private" value="TẮT" style="float: right;"></div><div class="kq-tinnhan-gui" style="border: 3px solid white;padding: 10px;height: 190px;overflow: scroll;"><p><b>'+msg.nameuser+':</b>'+msg.noidung+'</p></div><div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">            <input type="text" class="mess-tinnhan-gui" placeholder="Type a message" value="">            <input type="button" class="send-tinnhan-gui" idusernhan="'+msg.iduser+'" value="gui">        </div>    </div>';
+                var html_chatprivate = '<div id="' + msg.nameuser + '"style="max-width:250px;width: 30%;position: fixed;bottom: 0;left: 10px;height: 300px;z-index: 999;background-color: #eee;/* opacity: 0.4; */border: 1px solid rgba(0,0,0,.1);box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);"><div style="   min-height: 35px;   background: lightseagreen !important;line-height: 35px;padding-left: 10px;"><span style="color:white" class="nameuser">'+msg.nameuserobj+'</span><input type="button" class="off-chat-private" value="  X " style="float: right;border: none;background-color: transparent; color: white; padding-top: 10px; "></div><div class="kq-tinnhan-gui" style="border: 3px solid white;padding: 10px;height: 190px;overflow-y: scroll;"><p><b>'+msg.nameuser+':</b>'+msg.noidung+'</p></div><div class="mespri">            <input type="text" class="mess-tinnhan-gui form-control" placeholder="Type a message" value="">            <input type="button" class="send-tinnhan-gui btn btn-success" idusernhan="'+msg.iduser+'" value="Send">        </div>    </div>';
                 if ($("#" +  msg.nameuser).length == 0) {
                     //it doesn't exist
                     $('body').append(html_chatprivate);
@@ -161,11 +182,38 @@ socket.on("server-chat-room",function(data){
 	$("#listMessagesRoom").prepend("<div class='msRoom'>" + data.un + ":" + data.nd +"</div><p class='time'>" + time +"</p>");	
 });
 
+socket.on('kick',function(){
+	$("#btnLogout").click();
+	$("#fix-register-card").hide();
+});
+
+socket.on('receivePhoto', function(data){
+		console.log(data);
+	// 	document.getElementById("showPhoto").src = data.path;
+	$("#listMessages").prepend("<div class='ms'>" + data.un +': ' + "<img id='theImg' src="+ data.path + " /></div>");
+	// $('#listMessages').prepend("<img id='theImg' src="+ data.path + " />'");	
+});
+
+function submitImg(){
+	var selector 	= document.getElementById("fileSelector");
+	// var img 			= document.getElementById("review");
+
+	var reader = new FileReader();
+  reader.onload = function (e) {
+    // img.src = e.target.result;
+		socket.emit("sendPhoto", {base64:e.target.result});
+  }
+ 	reader.readAsDataURL(selector.files[0]);
+}
 $(document).ready(function(){
 	$("#loginForm").show();
 	$("#registerForm").hide();
 	$("#chatForm").hide();
+	$('#fix-register-card').hide();
 
+	$('#fileSelector').on('change',function(){
+		submitImg();
+	});
 	//emit username>server
 	$("#btnRegister").click(function(){
 		// socket.emit("Client-send-username", $("#txtUserName").val());
@@ -174,9 +222,44 @@ $(document).ready(function(){
 	});
 
 	$("#btnBack").click(function(){
-	$("#loginForm").show();
-	$("#registerForm").hide();
+		$("#loginForm").show();
+		$("#registerForm").hide();
 	});
+
+	$("#btnDone-fix").click(function(){
+		var nameuser = $("#nameuser").val();
+		var oldpass = $('#old-password-fix').val();
+		var newpass = $('#new-password-fix').val();
+		var firstname = $('#first-name-fix').val();
+		var lastname = $('#last-name-fix').val();
+		var email = $('#email-fix').val();
+		if (oldpass.trim()==0){
+			$('#old-password-fix').focus;
+			$(".log-fix-card").html("Bạn chưa nhập mật khẩu cũ");
+			return false;
+		}else if (newpass.trim()==0){
+			$('#new-password-fix').focus;
+			$(".log-fix-card").html("Bạn chưa nhập mật khẩu mới");
+			return false;
+		}else if (email.trim()==0){
+			$('#email-fix').focus;
+			$(".log-fix-card").html("Email không được để trống");
+			return false;
+		}else if (firstname.trim()==0){
+			$('#first-name-fix').focus;
+			$(".log-fix-card").html("Bạn chưa nhập đầy đủ tên");
+			return false;
+		}else if (lastname.trim()==0){
+			$('#last-name-fix').focus;
+			$(".log-fix-card").html("Bạn chưa nhập đầy đủ tên");
+			return false;
+		}
+		socket.emit('send-fix-info',{nameuser:nameuser, oldpass:oldpass, newpass:newpass,email:email, firstname:firstname, lastname:lastname});
+	});
+
+	$('#btnCancel').click(function(e){
+        $('#fix-register-card').hide();
+    });
 
 	$("#btnRegisterUser").click(function(e){
 	   	var u = $('#txtUserName-register').val();
@@ -299,6 +382,8 @@ $(document).ready(function(){
 		socket.emit("tao-room", $("#txtRoom").val());
 		$("#txtRoom").val("");
 	});
+
+
 	// $("#btnRoom2").click(function(){
 	// 	socket.emit("join-room2");
 	// });
@@ -309,3 +394,24 @@ $(document).ready(function(){
 
 
 });
+
+// window.onload = function() {
+// 	document.getElementById("fileSelector").addEventListener("change", function(){		
+// 		submitImg();
+// 	});
+
+// 	socket.on('receivePhoto', function(data){
+// 	document.getElementById("showPhoto").src = data.path
+// 	});
+// };
+// function submitImg(){
+// 	var selector 	= document.getElementById("fileSelector");
+// 	var img 	= document.getElementById("review");
+
+// 	var reader = new FileReader();
+//         reader.onload = function (e) {
+//             img.src = e.target.result;
+//             socket.emit("sendPhoto", {base64:e.target.result});
+//         }
+//  	reader.readAsDataURL(selector.files[0]);
+// }

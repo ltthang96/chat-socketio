@@ -3,6 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Chat</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+ 	<meta content="width=device-width,height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<script src="jquery.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 	<script src="xuly.js"></script>
@@ -10,9 +13,74 @@
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="layout.css">
+	<!-- <link rel="stylesheet" type="text/css" href="AdminLTE.min.css"> -->
+	<script>
+		$(window).on('resize',function(){
+    if($(this).width() <=320){
+        $('#boxContent').hide();
+        $('#roomchat').hide();
+        $('#dsRoom').hide();
+    	$('.usertitle').css('border-radius','0px');
+    	$('.roomtitle').css('border-radius','0px');
+    }
+    else   {
+    $('.usertitle').css('border-radius','10px 10px 0px 0px');
+	$('.roomtitle').css('border-radius','10px 10px 0px 0px'); 
+    $('#boxContent').show();
+    $('#roomchat').show();
+	$('#dsRoom').show();
+	}
+});
+	$(document).ready(function(){	
+		$('.usertitle').click(function(){
+		    $('#boxContent').toggle(100);
+		});
+
+		$('.roomtitle').click(function(){
+		    $('#roomchat').toggle(100);
+		    $('#dsRoom').toggle(100);
+		});
+
+		// $("#theImg").click(function(){
+		// 	$(this).target = "_blank";
+	 //        window.location = $(this).find("a").attr("href");
+	 //        return false;
+		// });
+
+	});
+	</script>
+	<style>
+@media only screen and (max-height:375px) {
+  /* For mobile phones: */
+  #listMessages{height: 230px}
+  #listMessagesRoom{height: 210px}
+}
+@media only screen and (min-height:485px) {
+  /* For mobile phones: */
+  #listMessages{height: 460px}
+  #listMessagesRoom{height: 430px}
+}
+
+@media only screen and (min-width:920px) {
+  /* For mobile phones: */
+  #txtRoom{width: 65%;margin-bottom: 0px}
+}
+	@media only screen and (max-width:400px) {
+  /* For mobile phones: */
+ #fix-register-card{width:90%;}
+}
+	@media only screen and (max-width:320px) {
+  /* For mobile phones: */
+  #left, #right {width:100%;padding-left: 0px;padding-top: 0px}
+  #txtRoom{width: 57%;margin-bottom: 0px}
+  #listMessages{height: 270px}
+  #listMessagesRoom{height: 230px}
+
+}
+</style>
 </head>
 <body>
-	<div id=wrapper>
+	<div id="wrapper">
 		<!-- form đăng nhập -->
 		<div id="loginForm" class="container">
 			<h2 >LOG IN</h2>
@@ -27,7 +95,6 @@
 			<input type="submit" class="btn btn-primary" value="Login" id="btnLogin">	
 			<div class="alert-login"></div>		
 		</div>
-
 		<!-- form đăng ký -->
 		<div id="registerForm">
 			<h3>REGISTER</h3>
@@ -40,13 +107,36 @@
 			<input type="submit" class="btn btn-primary" value="Register" id="btnRegisterUser">
 			<div class="alert-register"></div>
 		</div>
-		
+
+	<!-- form fix info -->
+        <div id="fix-register-card">
+			<h3>SỬA THÔNG TIN CÁ NHÂN</h3>
+			<input autocomplete="off" class="form-control" type="text" name="user-name" id="nameuser" readonly>
+			<input autocomplete="off" class="form-control" type="password" name="old password" id="old-password-fix" placeholder="Old Password">
+			<input autocomplete="off" class="form-control" type="password" name="password" id="new-password-fix" placeholder="New Password">
+			<input autocomplete="off" class="form-control" type="text" name="email" id="email-fix" placeholder="Email">
+			<input autocomplete="off" class="form-control" type="text" name="firstname" id="first-name-fix" placeholder="First Name">
+			<input autocomplete="off" class="form-control" type="text" name="lastname" id="last-name-fix" placeholder="Last Name">
+			<input type="button" class="btn btn-primary" value="OK" id="btnDone-fix">							
+			<!--  <button id="fix-registertuser-action" title="Sửa thông tin">
+			        <i>Ok</i>
+			      </button> -->
+			<input type="button" class="btn btn-primary" value="Cancel" id="btnCancel">							
+			<!--                 <div style="margin-top: 10px">
+			<button title="back">
+			    <i>Cancel</i>
+			          </button>
+			</div> -->
+			<div class="log-fix-card"></div>
+        </div>
+
 		<!-- chat -->
 		<div id="chatForm">
 			<div id="left">
-				<div id="boxTitle">User Online</div>
+				<!-- <h2> Chat With Everyone</h2> -->
+				<div id="boxTitle" class="usertitle">User Online</div>
 				<div id="boxContent"></div>
-				<div id="boxTitle">Chat room</div>
+				<div id="boxTitle" class="roomtitle">Chat room</div>
 				<div id="roomchat">
 					<input type="text" class="form-control" id="txtRoom" placeholder="Room name">
 					<input type="button" id="btntaoRoom" class="btn btn-success" value="Tạo room">
@@ -55,7 +145,7 @@
 					<!-- <input type="button" id="btnRoom3" value="Room 3"> -->
 				</div>
 				<div id="dsRoom">
-					<input type="button"  class="btn btn-info" id="btnRoom1" value="Room 1">
+					<!-- <input type="button"  class="btn btn-info" id="btnRoom1" value="Room 1"> -->
 				</div>
 			</div>
 			<div id="right">
@@ -67,22 +157,29 @@
 				</div>
 				<div id="listMessages">
 				</div>
-				<div id="thongbao"></div>
+				<!-- <div>
+					<img width="300px" id="showPhoto" src="">
+				</div> -->
+				<!-- <div id="thongbao"></div> -->
 				<div id="messages">
 				<input  type="text"  class="form-control" id="txtMessages" placeholder="Input text...">
 				<input  type="button" class="btn btn-success" id="btnSendMessages" value="Send">
+				<!-- <img id="review" width="300px"></img> -->
+					  <!-- <img width="300px" id="showPhoto" src=""> -->
+				<input id="fileSelector" type="file">
 				</div>
+
 				<div id="listMessagesRoom">
 				</div>
-				<div id="thongbaoRoom"></div>
+				<!-- <div id="thongbaoRoom"></div> -->
 				<div id="messagesRoom">
-				<input  type="text" id="txtMessagesRoom" placeholder="Input text...">
+				<input  type="text" class="form-control" id="txtMessagesRoom" placeholder="Input text...">
 				<input  type="button" class="btn btn-success" id="btnSendMessagesRoom" value="Send">
 				</div>
 				 <input type="hidden" id="iduser" />
      		   <input type="hidden" id="nameuser" />
 			</div>
 		</div>
-	</div>
+	</div>	<!-- <footer>Design by &copy; Thắng Lục </footer> -->
 </body>
 </html>
