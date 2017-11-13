@@ -1,4 +1,4 @@
-var socket = io("https://ketnoi.herokuapp.com/");
+var socket = io("http://chatsocketio.azurewebsites.net/");
 
 //server>client
 socket.on("server-send-dki-thatbai",function(){
